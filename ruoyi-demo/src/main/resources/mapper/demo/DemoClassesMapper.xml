@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.demo.mapper.DemoClassesMapper">
+    <resultMap type="DemoClasses" id="DemoClassesResult">
+        <result property="classesId"    column="classes_id"    />
+        <result property="classesName"    column="classes_name"    />
+        <result property="classesGrade"    column="classes_grade"    />
+        <result property="classesTeacher"    column="classes_teacher"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <resultMap id="DemoClassesDemoStudentResult" type="DemoClasses" extends="DemoClassesResult">
+        <collection property="demoStudentList" notNullColumn="sub_student_id" javaType="java.util.List" resultMap="DemoStudentResult" />
+    </resultMap>
+
+    <resultMap type="DemoStudent" id="DemoStudentResult">
+        <result property="studentId"    column="sub_student_id"    />
+        <result property="classesId"    column="sub_classes_id"    />
+        <result property="studentName"    column="sub_student_name"    />
+        <result property="studentAge"    column="sub_student_age"    />
+        <result property="studentSex"    column="sub_student_sex"    />
+        <result property="studentBirthday"    column="sub_student_birthday"    />
+        <result property="STATUS"    column="sub_STATUS"    />
+        <result property="createBy"    column="sub_create_by"    />
+        <result property="createTime"    column="sub_create_time"    />
+        <result property="updateBy"    column="sub_update_by"    />
+        <result property="updateTime"    column="sub_update_time"    />
+        <result property="delFlag"    column="sub_del_flag"    />
+        <result property="remark"    column="sub_remark"    />
+    </resultMap>
+
+    <select id="selectDemoClassesByClassesId" parameterType="Long" resultMap="DemoClassesDemoStudentResult">
+        select a.classes_id, a.classes_name, a.classes_grade, a.classes_teacher, a.status, a.create_by, a.create_time, a.update_by, a.update_time, a.del_flag, a.remark,
+ b.student_id as sub_student_id, b.classes_id as sub_classes_id, b.student_name as sub_student_name, b.student_age as sub_student_age, b.student_sex as sub_student_sex, b.student_birthday as sub_student_birthday, b.STATUS as sub_STATUS, b.create_by as sub_create_by, b.create_time as sub_create_time, b.update_by as sub_update_by, b.update_time as sub_update_time, b.del_flag as sub_del_flag, b.remark as sub_remark
+        from demo_classes a
+        left join demo_student b on b.classes_id = a.classes_id
+        where a.classes_id = #{classesId}
+    </select>
+</mapper>
